@@ -1,13 +1,26 @@
 package http
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/Vinaychinnu/platform-api/internal/application"
+	"github.com/Vinaychinnu/platform-api/internal/transport/http/handlers"
+)
 
 func NewRouter() http.Handler {
 	mux := http.NewServeMux()
 
+	// health check
 	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	})
+
+	// project wiring (temporary in-memory)
+	projectRepo := application.NewInMemoryProjectRepository()
+	projectService := application.NewProjectService(projectRepo)
+	projectHandler := handlers.NewProjectHandler(projectService)
+
+	mux.HandleFunc("/projects", projectHandler.CreateProject)
 
 	return mux
 }
