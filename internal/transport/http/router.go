@@ -22,5 +22,12 @@ func NewRouter() http.Handler {
 
 	mux.HandleFunc("/projects", projectHandler.CreateProject)
 
+	// environment wiring (temporary in-memory)
+	envRepo := application.NewInMemoryEnvironmentRepository()
+	envService := application.NewEnvironmentService(envRepo)
+	envHandler := handlers.NewEnvironmentHandler(envService)
+
+	mux.HandleFunc("/environments", envHandler.CreateEnvironment)
+
 	return mux
 }
