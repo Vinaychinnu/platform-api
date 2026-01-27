@@ -21,3 +21,16 @@ type CreateEnvironmentResponse struct {
 	ProjectID string `json:"project_id"`
 	Name      string `json:"name"`
 }
+
+type CreateReleaseRequest struct {
+	ID            string `json:"id"`
+	EnvironmentID string `json:"environment_id"`
+	Version       string `json:"version"`
+}
+
+type CreateReleaseResponse struct {
+	ID            string `json:"id"`
+	EnvironmentID string `json:"environment_id"`
+	Version       string `json:"version"`
+	Status        string `json:"status"`
+}

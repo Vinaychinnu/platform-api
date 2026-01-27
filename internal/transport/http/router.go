@@ -29,5 +29,12 @@ func NewRouter() http.Handler {
 
 	mux.HandleFunc("/environments", envHandler.CreateEnvironment)
 
+	// release wiring (temporary in-memory)
+	releaseRepo := application.NewInMemoryReleaseRepository()
+	releaseService := application.NewReleaseService(releaseRepo)
+	releaseHandler := handlers.NewReleaseHandler(releaseService)
+
+	mux.HandleFunc("/releases", releaseHandler.CreateRelease)
+
 	return mux
 }
