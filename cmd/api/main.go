@@ -9,12 +9,25 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/Vinaychinnu/platform-api/internal/infrastructure"
 	apphttp "github.com/Vinaychinnu/platform-api/internal/transport/http"
 	"github.com/Vinaychinnu/platform-api/pkg/config"
 )
 
 func main() {
 	cfg := config.Load()
+
+	db, err := infrastructure.OpenPostgres(
+		cfg.DBHost,
+		cfg.DBPort,
+		cfg.DBUser,
+		cfg.DBPass,
+		cfg.DBName,
+	)
+	if err != nil {
+		log.Fatalf("failed to connect to db: %v", err)
+	}
+	defer db.Close()
 
 	server := &http.Server{
 		Addr:    ":" + cfg.HTTPPort,
