@@ -3,12 +3,13 @@ package http
 import (
 	"net/http"
 
+	"database/sql"
 	"github.com/Vinaychinnu/platform-api/internal/application"
 	"github.com/Vinaychinnu/platform-api/internal/infrastructure"
 	"github.com/Vinaychinnu/platform-api/internal/transport/http/handlers"
 )
 
-func NewRouter() http.Handler {
+func NewRouter(db *sql.DB) http.Handler {
 	mux := http.NewServeMux()
 
 	// health check
@@ -17,7 +18,7 @@ func NewRouter() http.Handler {
 	})
 
 	// repositories (composition root)
-	repos := infrastructure.NewInMemoryRepositories()
+	repos := infrastructure.NewPostgresRepositories(db)
 
 	// services
 	projectService := application.NewProjectService(repos.Projects)

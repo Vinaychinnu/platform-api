@@ -31,7 +31,7 @@ func main() {
 
 	server := &http.Server{
 		Addr:    ":" + cfg.HTTPPort,
-		Handler: apphttp.NewRouter(),
+		Handler: apphttp.NewRouter(db),
 	}
 
 	go func() {
